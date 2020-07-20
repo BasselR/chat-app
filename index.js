@@ -11,13 +11,15 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
       console.log('user disconnected');
     });
-    socket.on('chat message', (msg) => {
-        console.log("message: " + msg);
-        io.emit('chat message', msg);
+    // chat message 'bundle' object contains 'user' and 'msg'
+    socket.on('chat message', (bundle) => {
+        console.log("user: " + bundle.user);
+        console.log("message: " + bundle.msg);
+        io.emit('chat message', bundle.msg);
     });
 });
 
-const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 3050;
 
 http.listen(PORT, () => {
   console.log(`listening on *:${PORT}`);
