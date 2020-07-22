@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
     socket.on('chat message', msg => {
       let fullMsg = nicknames[socket.id] + ": " + msg;
       io.emit('chat message', fullMsg);
-      console.log(`socket id ${socket.id} sent msg: ${msg}`);
+      console.log(`socket id ${socket.id} (${nicknames[socket.id]}) sent msg: ${msg}`);
     });
 });
 
