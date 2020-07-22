@@ -2,6 +2,8 @@ var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
+var nicknames = {};
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
@@ -11,11 +13,12 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
       console.log('user disconnected');
     });
-    // chat message 'bundle' object contains 'user' and 'msg'
-    socket.on('chat message', (bundle) => {
-        console.log("user: " + bundle.user);
-        console.log("message: " + bundle.msg);
-        io.emit('chat message', bundle.msg);
+    socket.on('set nickname', nick => {
+      nicknames[socket.id] = nick;
+    });
+    socket.on('chat message', msg => {
+      let fullMsg = nicknames[socket.id] + ": " + msg;
+      io.emit('chat message', fullMsg);
     });
 });
 

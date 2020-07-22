@@ -23,14 +23,6 @@
       #messages li:nth-child(odd) { background: #eee; }
     </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <script>
-      var nickname;
-      function setNick(){
-        nickname = document.getElementById('writeNick').value;
-        document.getElementById('first').style.display = "none";
-        document.getElementById('second').style.display = "block";
-      }
-    </script>
   </head>
   <body>
     <div class="center" id="first">
@@ -45,13 +37,31 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
+      var socket = io();
+      var nickname;
+      console.log("new version ay");
+      function setNick(){
+        nickname = document.getElementById('writeNick').value;
+        socket.emit('set nickname', nickname);
+        document.getElementById('first').style.display = "none";
+        document.getElementById('second').style.display = "block";
+      }
       $(function () {
-        var socket = io();
+        // var socket = io();
+        // var nickname;
+        // console.log("new version ay");
+        // function setNick(){
+        //   nickname = document.getElementById('writeNick').value;
+        //   socket.emit('set nickname', nickname);
+        //   document.getElementById('first').style.display = "none";
+        //   document.getElementById('second').style.display = "block";
+        // }
         $('form').submit(function(e){
           e.preventDefault(); // prevents page reloading
-          var fullMsg = nickname + ": " + $('#m').val();
-          console.log(fullMsg);
-          socket.emit('chat message', { user: nickname, msg: fullMsg } );
+          let msg = $('#m').val();
+          //var fullMsg = nickname + ": " + $('#m').val();
+          console.log("msg: " + msg);
+          socket.emit('chat message', msg);
           $('#m').val('');
           return false;
         });
